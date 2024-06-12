@@ -14,19 +14,22 @@ func _physics_process(delta) -> void:
 	player_controlling(delta)
 	move_and_slide()
 
-func player_controlling(delta) -> void:
-	if not is_on_floor() and not is_die:
-		velocity.y += gravity * delta
-		
-	if is_die:
-		velocity.y += gravity * 2 * delta
-	
-	# Direction will be -1, 0, 1
-	current_direction = Input.get_axis("move_left", "move_right")
-	
+func player_controlling(delta:float) -> void:
+	calculate_velocity(delta)
+	handle_input()
 	handle_player_movement()
 	handle_player_flip()
 	handle_animation()
+
+func calculate_velocity(delta:float) -> void:
+	if not is_on_floor() and not is_die:
+		velocity.y += gravity * delta
+	if is_die:
+		velocity.y += gravity * 2 * delta
+
+func handle_input() -> void:
+	# Direction will be -1, 0, 1
+	current_direction = Input.get_axis("move_left", "move_right")
 
 func handle_player_movement() -> void:
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
